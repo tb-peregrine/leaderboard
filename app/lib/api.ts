@@ -66,10 +66,14 @@ export async function fetchLeaderboard(timeRange: TimeRange): Promise<Player[]> 
         name: item.player,
         avatarUrl: getRandomAvatar(item.player),
         wins: {
-            [timeRange]: item.total_wins
+            '24h': timeRange === '24h' ? item.total_wins : 0,
+            '7d': timeRange === '7d' ? item.total_wins : 0,
+            '30d': timeRange === '30d' ? item.total_wins : 0
         },
         rank: {
-            [timeRange]: item.rank
+            '24h': timeRange === '24h' ? item.rank : 0,
+            '7d': timeRange === '7d' ? item.rank : 0,
+            '30d': timeRange === '30d' ? item.rank : 0
         }
     }))
 } 
