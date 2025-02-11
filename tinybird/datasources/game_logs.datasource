@@ -1,0 +1,13 @@
+
+DESCRIPTION >
+    Game logs datasource to store game results and related data
+
+SCHEMA >
+    `game_id` String `json:$.game_id`,
+    `game_start` DateTime64(3) `json:$.game_start`,
+    `winner` String `json:$.winner`,
+    `payload` String `json:$.payload`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(game_start)"
+ENGINE_SORTING_KEY "game_start, game_id"

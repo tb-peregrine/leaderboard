@@ -1,0 +1,23 @@
+
+DESCRIPTION >
+    API endpoint to get player rankings by total wins within a date range
+
+NODE filtered_games
+SQL >
+    %
+    SELECT *
+    FROM game_logs
+    WHERE game_start BETWEEN parseDateTime32BestEffort({{String(start_date, '2025-01-01 00:00:00')}}) AND parseDateTime32BestEffort({{String(end_date, '2025-12-31 23:59:59')}})
+
+NODE leaderboard
+SQL >
+    SELECT 
+        winner as player,
+        count() as total_wins,
+        row_number() OVER (ORDER BY total_wins DESC) as rank
+    FROM filtered_games
+    GROUP BY winner
+    ORDER BY total_wins DESC
+    LIMIT 10
+
+TYPE endpoint
