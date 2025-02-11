@@ -3,6 +3,15 @@ import { Player, TimeRange } from '../types/leaderboard'
 const TINYBIRD_API_URL = process.env.NEXT_PUBLIC_TINYBIRD_API_URL
 const TINYBIRD_API_KEY = process.env.NEXT_PUBLIC_TINYBIRD_API_KEY
 
+// Add interface for API response
+interface LeaderboardApiResponse {
+    data: {
+        player: string
+        total_wins: number
+        rank: number
+    }[]
+}
+
 function getDateRangeForTimeRange(timeRange: TimeRange): { start: string; end: string } {
     const end = new Date()
     const start = new Date()
@@ -50,9 +59,9 @@ export async function fetchLeaderboard(timeRange: TimeRange): Promise<Player[]> 
         throw new Error('Failed to fetch leaderboard data')
     }
 
-    const data = await response.json()
+    const data = await response.json() as LeaderboardApiResponse
 
-    return data.data.map((item: any) => ({
+    return data.data.map((item) => ({
         id: item.player,
         name: item.player,
         avatarUrl: getRandomAvatar(item.player),
